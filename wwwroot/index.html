@@ -1,0 +1,232 @@
+<html>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="range4.css" />
+    <style>
+    </style>
+    <link type="text/css" rel="stylesheet" href="index.css" />
+    <script type="text/javascript" src="/lib/vue/vue.js"></script>
+    <script type="text/javascript" src="/lib/moment/min/moment.min.js"></script>
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    <body>
+        <div id="app">
+            
+            <div id="top">
+                <div style="display: flex; flex-direction: row">
+                    <img style="flex: 0; max-height: 16px; padding-right: 8px" src="img/Chromecast_cast_button_icon.svg" />
+                    <div style="flex: 1; vertical-align: center">
+                        <span v-for="d in devices" v-if="d.id == selectedDeviceId">{{d.name}}</span>
+                    </div>
+                    <div style="flex: 0">
+                        <i @click="toggleDeviceMenu" v-if="!deviceMenu" class="fa fa-chevron-down"></i>
+                        <i @click="toggleDeviceMenu" v-if="deviceMenu" class="fa fa-chevron-up"></i>
+                    </div>
+                </div>
+                <div v-if="deviceMenu" class="deviceMenu">
+                    <p>
+                        <b>Available devices</b> - <i @click="updateDevices" class="fa fa-refresh"></i>
+                    </p>
+                    <div v-for="device in devices" @click="selectDevice(device)">
+                         <div style="display: flex; flex-direction: row">
+                            <img style="padding-right: 8px; flex: 0; max-height: 16px" src="img/Chromecast_cast_button_icon.svg" />
+                            <div style="flex: 1" class="dotdotdot">{{device.name}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="path">
+
+                <span class="pathSegment link" @click="cdUp(-1)">
+                    <span class="name"><i class="fa fa-home"></i></span>
+                    <span class="separator">\</span>
+                </span>
+
+                <span v-for="(c,i) in dir.cwd" class="pathSegment link" @click="cdUp(i)">
+                    <span class="name">{{c}}</span>
+                    <span class="separator">\</span>
+                </span>
+
+            </div>
+
+            <div id="main">
+                <table class="files">
+                    <tr v-for="f in dir.files" @click="selectFile(f)" :class="{ selected: f == selectedFile }">
+                        <td class="type">
+
+                            <span class="fa-stack fa-lg" style="color: #ccc">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-stack-1x fa-inverse" :class="{ 'fa-folder': f.type == 'dir', 'fa-film': f.type != 'dir' }"></i>
+                            </span>
+
+                        </td>
+                        <td class="info">
+                            <div class="name" style="dotdotdot">{{f.name}}</div>
+                            <div class="summary">
+                                <span v-if="f.type != 'dir'">{{formatSize(f.sz)}},</span>
+                                {{formatTime(f.mtime)}}
+                            </div>
+                        </td>
+                        <td class="controls"><i class="fa fa-play"></i></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div id="bottom">
+
+<!-- <img src="img/Chromecast_cast_button_icon.svg" /> -->
+
+                <div style="display: flex; flex-direction: row">
+                    <div style="flex: 1; text-align: center" class="dotdotdot">
+                        {{cc.title}}
+                    </div>
+                </div>
+
+                <div style="display: flex; flex-direction: row">
+                    <div style="flex: 1; padding: 4px 16px">
+                        <input 
+                            id="timeSlider"
+                            style="width: 100%"
+                            type="range"
+                            min="0"
+                            :max="cc.duration"
+                            :value="currentTime"
+                            @change="seek"
+                            @input="seekPreview"
+                            />
+                    </div>
+                </div>
+                <div style="display: flex; flex-direction: row">
+                    <div>{{formatDuration(currentTime)}}</div>
+                    <div style="flex: 1; text-align: center; color: #666">
+                        <!--status-->
+                        
+                        <!-- <span class="fa-stack fa-lg">
+                            <i class="fa fa-circle fa-stack-2x"></i>
+                            <i class="fa fa-backward fa-stack-1x fa-inverse"></i>
+                        </span> -->
+
+                        <!--
+
+                        <button
+                            @click="ccPlay"
+                            :disabled="cc.state != 'PAUSED'"
+                            >
+                            <i class="fa fa-play"></i>
+                        </button>
+
+                        <button
+                            @click="ccPause"
+                            :disabled="cc.state != 'PLAYING'"
+                            >
+                            <i class="fa fa-pause"></i>
+                        </button>
+
+                        -->
+
+                        <button
+                            @click="ccPlayPause"
+                            >
+                            <i v-if="cc.state == 'PAUSED'" class="fa fa-play"></i>
+                            <i v-if="cc.state == 'PLAYING'" class="fa fa-pause"></i>
+                        </button>
+
+                        <button
+                            @click="ccStop"
+                            :disabled="cc.state == 'IDLE'"
+                            >
+                            <i class="fa fa-stop"></i>
+                        </button>
+
+                        <!--
+
+                        <span class="fa-stack fa-lg" @click="ccPlay" v-if="cc.state == 'PAUSED'">
+                            <i class="fa fa-circle fa-stack-2x"></i>
+                            <i class="fa fa-play fa-stack-1x fa-inverse"></i>
+                        </span>
+
+                        <span class="fa-stack fa-lg" @click="ccPause" v-if="cc.state == 'PLAYING'">
+                            <i class="fa fa-circle fa-stack-2x"></i>
+                            <i class="fa fa-pause fa-stack-1x fa-inverse"></i>
+                        </span>
+
+                        <span class="fa-stack fa-lg" @click="ccStop" v-if="cc.state != 'IDLE'">
+                            <i class="fa fa-circle fa-stack-2x"></i>
+                            <i class="fa fa-stop fa-stack-1x fa-inverse"></i>
+                        </span>
+
+                        -->
+
+                        <!-- <span class="fa-stack fa-lg">
+                            <i class="fa fa-circle fa-stack-2x"></i>
+                            <i class="fa fa-forward fa-stack-1x fa-inverse"></i>
+                        </span> -->
+                    </div>
+                    <div>{{formatDuration(cc.duration)}}</div>
+                </div>
+
+
+            </div>
+
+<!--
+
+            <div id="files">
+                <b>CWD</b><br>
+                <div>
+                    <span @click="cdUp(-1)">
+                        (root)
+                    </span>
+                    <span v-for="(a,b) in dir.cwd" @click="cdUp(b)">
+                        {{a}} |
+                    </span>
+                </div>
+                <b>Files</b><br>
+                <table>
+                    <tr v-for="file in dir.files" @click="selectFile(file)">
+                        <td>
+                            <span v-if="file.type == 'dir'"><i class="fa fa-folder-o"></i></span>
+                            <span v-if="file.type == 'file'"><i class="fa fa-file-o"></i></span>
+                        </td>
+                        <td>
+                            {{file.name}}
+                        </td>
+                        <td>
+                            {{formatSize(file.sz)}}
+                        </td>
+                        <td>
+                            {{formatTime(file.mtime)}}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div id="status">
+                <div>
+                    <b>Devices</b> <span @click="updateDevices"><i class="fa fa-refresh"></i></span><br><br>
+                    <div v-for="dev in devices" @click="selectDevice(dev)" :class="{ selected: selectedDevice != null && dev.id == selectedDevice.id }">
+                        <i class="fa fa-television"></i> {{dev.name}}
+                    </div>
+                    </ul>
+                    <br>
+
+                    <input id="timeSlider" type="range" min="0" :max="cc.duration" :value="currentTime" style="width: 100%" @change="seek" @input="seekPreview">
+
+                    <span v-if="previewTime == null">{{formatDuration(currentTime)}}</span>
+                    <span v-if="previewTime != null">{{formatDuration(previewTime)}}</span> / {{formatDuration(cc.duration)}} - {{cc.state}}<br>
+
+                    <button @click="ccPlay" :disabled="cc.state == 'PLAYING' || cc.state == 'BUFFERING' || cc.state == 'IDLE'"><i class="fa fa-play"></i></button>
+                    <button @click="ccPause" :disabled="cc.state == 'PAUSED' || cc.state == 'BUFFERING' || cc.state == 'IDLE'"><i class="fa fa-pause"></i></button>
+                    <button @click="ccStop" :disabled="cc.state == 'IDLE'"><i class="fa fa-stop"></i></button>
+                    
+                 
+                </div>
+            </div>
+
+            -->
+
+
+        </div>
+    </body>
+    <script type="text/javascript" src="index.js"></script>
+</html>

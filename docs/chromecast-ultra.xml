@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root xmlns="urn:schemas-upnp-org:device-1-0">
+   <specVersion>
+      <major>1</major>
+      <minor>0</minor>
+   </specVersion>
+   <URLBase>http://192.168.1.172:8008</URLBase>
+   <device>
+      <deviceType>urn:dial-multiscreen-org:device:dial:1</deviceType>
+      <friendlyName>Chromecats=^_^=</friendlyName>
+      <manufacturer>Google Inc.</manufacturer>
+      <modelName>Chromecast Ultra</modelName>
+      <UDN>uuid:f169a602-0e67-f1e5-346e-1c99a8a04374</UDN>
+      <iconList>
+         <icon>
+            <mimetype>image/png</mimetype>
+            <width>98</width>
+            <height>55</height>
+            <depth>32</depth>
+            <url>/setup/icon.png</url>
+         </icon>
+      </iconList>
+      <serviceList>
+         <service>
+            <serviceType>urn:dial-multiscreen-org:service:dial:1</serviceType>
+            <serviceId>urn:dial-multiscreen-org:serviceId:dial</serviceId>
+            <controlURL>/ssdp/notfound</controlURL>
+            <eventSubURL>/ssdp/notfound</eventSubURL>
+            <SCPDURL>/ssdp/notfound</SCPDURL>
+         </service>
+      </serviceList>
+   </device>
+</root>

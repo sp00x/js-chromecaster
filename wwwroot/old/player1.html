@@ -1,0 +1,92 @@
+<html>
+    <meta name="viewport" content="initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css" />
+    <link type="text/css" rel="stylesheet" href="index.css" />
+    <script type="text/javascript" src="/lib/vue/vue.js"></script>
+    <script type="text/javascript" src="/lib/moment/min/moment.min.js"></script>
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    <style>
+        html, body, #app { width: 100%; height: 100%; margin: 0px; }
+        #app {
+            display: flex;
+            flex-direction: row;
+        }
+        #files {
+            flex: 3;
+            background-color: #fff;
+        }
+        #status {
+            background-color: #ccc;
+            flex: 1;
+
+        }
+        #files, #status {
+            padding: 16px;
+        }
+    </style>
+    <body>
+        <div id="app">
+
+            <div id="files">
+                <b>CWD</b><br>
+                <div>
+                    <span @click="cdUp(-1)">
+                        (root)
+                    </span>
+                    <span v-for="(a,b) in dir.cwd" @click="cdUp(b)">
+                        {{a}} |
+                    </span>
+                </div>
+                <b>Files</b><br>
+                <table>
+                    <tr v-for="file in dir.files" @click="selectFile(file)">
+                        <td>
+                            <span v-if="file.type == 'dir'"><i class="fa fa-folder-o"></i></span>
+                            <span v-if="file.type == 'file'"><i class="fa fa-file-o"></i></span>
+                        </td>
+                        <td>
+                            {{file.name}}
+                        </td>
+                        <td>
+                            {{formatSize(file.sz)}}
+                        </td>
+                        <td>
+                            {{formatTime(file.mtime)}}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div id="status">
+                <div>
+                    <b>Devices</b> <span @click="updateDevices"><i class="fa fa-refresh"></i></span><br><br>
+                    <div v-for="dev in devices" @click="selectDevice(dev)" :class="{ selected: selectedDevice != null && dev.id == selectedDevice.id }">
+                        <i class="fa fa-television"></i> {{dev.name}}
+                    </div>
+                    </ul>
+                    <br>
+
+                    <input id="timeSlider" type="range" min="0" :max="cc.duration" :value="currentTime" style="width: 100%" @change="seek" @input="seekPreview">
+
+                    <span v-if="previewTime == null">{{formatDuration(currentTime)}}</span>
+                    <span v-if="previewTime != null">{{formatDuration(previewTime)}}</span> / {{formatDuration(cc.duration)}} - {{cc.state}}<br>
+
+                    <button @click="ccPlay" :disabled="cc.state == 'PLAYING' || cc.state == 'BUFFERING' || cc.state == 'IDLE'"><i class="fa fa-play"></i></button>
+                    <button @click="ccPause" :disabled="cc.state == 'PAUSED' || cc.state == 'BUFFERING' || cc.state == 'IDLE'"><i class="fa fa-pause"></i></button>
+                    <button @click="ccStop" :disabled="cc.state == 'IDLE'"><i class="fa fa-stop"></i></button>
+                    
+                    <!--
+                    <pre>{{ JSON.stringify(cc,null,'  ')}}</pre>
+                    <br>
+                    <tt>{{ JSON.stringify(chromecastStatus,null,'  ') }}</tt>
+                    -->
+                    
+                </div>
+            </div>
+
+
+        </div>
+    </body>
+    <script type="text/javascript" src="index.js"></script>
+</html>

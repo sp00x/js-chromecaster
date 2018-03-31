@@ -1,0 +1,40 @@
+{
+  "name": "js-chromecaster",
+  "version": "0.0.0",
+  "description": "Simple web interface for playing local files on Chromecast",
+  "keywords": [
+    "chromecast"
+  ],
+   "main": "index.js",
+  "scripts": {
+  },
+  "author": {
+    "name": "Rune Bjerke",
+    "email": "github.public@green.spoox.org",
+    "url": "http://spoox.org"
+  },
+  "private": true,
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sp00x/js-chromecaster.git"
+  },
+  "homepage": "https://github.com/sp00x/js-chromecaster",
+  "bugs": {
+    "url": "https://github.com/sp00x/js-chromecaster/issues"
+  },
+  "dependencies": {
+    "castv2-client": "^1.2.0",
+    "chromecast-api": "^0.2.5",
+    "express": "^4.16.2",
+    "ffprobe": "^1.1.0",
+    "ffprobe-static": "^2.0.0",
+    "font-awesome": "^4.7.0",
+    "ip": "^1.1.5",
+    "moment": "^2.19.1",
+    "socket.io": "^2.0.4",
+    "sprintf": "^0.1.5",
+    "vue": "^2.5.2",
+    "windows-drive-letters": "^3.1.0"
+  }
+}

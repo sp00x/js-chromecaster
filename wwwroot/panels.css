@@ -1,0 +1,73 @@
+:root {
+    --panel-gradient-from: rgba(0,0,0,0);
+    --panel-gradient-to: rgba(0,0,0,0.25);
+    --panel-gradient-width: 6px;
+}
+
+.panels {
+    display: flex;
+}
+
+.vertical.panels {
+    flex-direction: column    
+}
+
+.horizontal.panels {
+    flex-direction: row;
+}
+
+.panel {
+    position: relative;
+    flex: 0;
+}
+
+.horizontal.panels > .panel.dropshadow:before {
+  content: "";
+  position: absolute;
+  bottom: 0px;
+  left: calc(-1 * var(--panel-gradient-width));  
+  top: 0px;
+  width: var(--panel-gradient-width);
+  background: var(--panel-gradient-to); /* For browsers that do not support gradients */
+  background: -webkit-linear-gradient(left, var(--panel-gradient-from) , var(--panel-gradient-to)); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(right, var(--panel-gradient-from), var(--panel-gradient-to)); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(right, var(--panel-gradient-from), var(--panel-gradient-to)); /* For Firefox 3.6 to 15 */
+  background: linear-gradient(to right, var(--panel-gradient-from), var(--panel-gradient-to)); /* Standard syntax */
+}
+
+.vertical.panels > .panel.dropshadow:after {
+  content: "";
+  position: absolute;
+  left: 0px;
+  right: 0px;  
+  top: 0px;
+  height: var(--panel-gradient-width);
+  background: var(--panel-gradient-to); /* For browsers that do not support gradients */
+  background: -webkit-linear-gradient(bottom, var(--panel-gradient-from) , var(--panel-gradient-to)); /* For Safari 5.1 to 6.0 */
+  background: -o-linear-gradient(top, var(--panel-gradient-from), var(--panel-gradient-to)); /* For Opera 11.1 to 12.0 */
+  background: -moz-linear-gradient(top, var(--panel-gradient-from), var(--panel-gradient-to)); /* For Firefox 3.6 to 15 */
+  background: linear-gradient(to top, var(--panel-gradient-from), var(--panel-gradient-to)); /* Standard syntax */
+}
+
+.vertical.panels > .panel:first-child:after {
+    height: 0px;
+}
+
+.viewport.panel {
+    padding: 8px;
+}
+
+.panel.fill {
+    flex: 1;
+}
+
+.panel.fill-2 {
+    flex: 2;
+}
+
+.panel.fill-3 {
+    flex: 2;
+}
+.panel.fill-4 {
+    flex: 2;
+}

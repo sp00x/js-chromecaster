@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
+        <link href="https://unpkg.com/vuetify/dist/vuetify.min.css" rel="stylesheet">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!--
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+        -->
+    </head>
+    <body>
+        <div id="app">
+            <v-app top-fixed-navbar xclass="application--toolbar application--footer application--footer-fixed">
+
+                <header>
+                    <v-navbar fixed>
+                        <v-navbar-logo>Admin</v-navbar-logo>
+                    </v-navbar>
+                </header>
+
+                <main>
+
+                    <v-layout row v-if="tab == 'browse'">
+                      <v-flex>
+                        <v-card>
+                            <v-toolbar color="light-blue" dark>
+                                <v-toolbar-side-icon></v-toolbar-side-icon>
+                                <v-toolbar-title>My files</v-toolbar-title>
+                                <v-spacer></v-spacer>
+                                <v-btn icon>
+                                    <v-icon>search</v-icon>
+                                </v-btn>
+                                <v-btn icon>
+                                    <v-icon>view_module</v-icon>
+                                </v-btn>
+                            </v-toolbar>
+                            <v-list two-line subheader>
+                            <v-list-tile avatar v-for="item in dir.files" v-bind:key="item.name" @click="">
+                                <v-list-tile-avatar>
+                                    <v-icon v-bind:class="[getIconClass(item)]">{{ getIcon(item) }}</v-icon>
+                                </v-list-tile-avatar>
+                                <v-list-tile-content>
+                                    <v-list-tile-title>{{ item.name }}</v-list-tile-title>
+                                    <v-list-tile-sub-title>{{ formatSize(item.sz) }} - {{ formatTime(item.mtime) }}</v-list-tile-sub-title>
+                                </v-list-tile-content>
+                                <v-list-tile-action>
+                                    <v-btn icon ripple>
+                                        <v-icon color="grey lighten-1">info</v-icon>
+                                    </v-btn>
+                                </v-list-tile-action>
+                            </v-list-tile>
+                            </v-list>
+                        </v-card>
+                      </v-flex>
+                    </v-layout>
+
+                    <v-container v-if="tab == 'recent'">
+                        Recently played..
+                    </v-container>
+
+                    <v-container v-if="tab == 'favorites'">
+                        Favorited..
+                    </v-container>
+
+                    <v-container v-if="tab == 'player'">
+                        File browser..
+                    </v-container>
+
+                </main>
+
+                <v-bottom-nav absolute :value="true" :active.sync="tab" class="transparent">
+                    <v-btn flat color="teal" value="browse">
+                        <span>Browse</span>
+                        <v-icon>folder</v-icon>
+                    </v-btn>
+                    <v-btn flat color="teal" value="recent">
+                        <span>Recent</span>
+                        <v-icon>history</v-icon>
+                    </v-btn>
+                    <v-btn flat color="teal" value="favorites">
+                        <span>Favorites</span>
+                        <v-icon>favorite</v-icon>
+                    </v-btn>
+                    <v-btn flat color="teal" value="player">
+                        <span>Player</span>
+                        <v-icon>tv</v-icon>
+                    </v-btn>
+                </v-bottom-nav>
+
+            </v-app>
+        </div>
+    </body>
+    <script type="text/javascript" src="/lib/moment/min/moment.min.js"></script>
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vuetify/dist/vuetify.js"></script>    
+    <script src="index.js" type="text/javascript"></script>
+</html>

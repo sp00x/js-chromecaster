@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root xmlns="urn:schemas-upnp-org:device-1-0" xmlns:dlna="urn:schemas-dlna-org:device-1-0" xmlns:sec="http://www.sec.co.kr/dlna">
+   <specVersion>
+      <major>1</major>
+      <minor>0</minor>
+   </specVersion>
+   <device>
+      <deviceType>urn:dial-multiscreen-org:device:dialreceiver:1</deviceType>
+      <friendlyName>[TV] Samsung 6 Series (65)</friendlyName>
+      <manufacturer>Samsung Electronics</manufacturer>
+      <manufacturerURL>http://www.samsung.com/sec</manufacturerURL>
+      <modelDescription>Samsung DTV RCR</modelDescription>
+      <modelName>UE65MU6175</modelName>
+      <modelNumber>1.0</modelNumber>
+      <modelURL>http://www.samsung.com/sec</modelURL>
+      <serialNumber>20090804RCR</serialNumber>
+      <UDN>uuid:dee3975a-9ffa-42c3-8754-32b3162a3b91</UDN>
+      <sec:deviceID>NSNSC5ZTTO2RS</sec:deviceID>
+      <sec:ProductCap>Resolution:1920X1080,Tizen,Y2017</sec:ProductCap>
+      <serviceList>
+         <service>
+            <serviceType>urn:dial-multiscreen-org:service:dial:1</serviceType>
+            <serviceId>urn:dial-multiscreen-org:serviceId:dial</serviceId>
+            <controlURL>/RCR/control/dial</controlURL>
+            <eventSubURL>/RCR/event/dial</eventSubURL>
+            <SCPDURL>dial.xml</SCPDURL>
+         </service>
+      </serviceList>
+      <sec:Capabilities>
+         <sec:Capability name="samsung:multiscreen:1" port="8001" location="/ms/1.0/" />
+      </sec:Capabilities>
+   </device>
+</root>

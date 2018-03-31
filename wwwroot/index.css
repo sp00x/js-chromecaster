@@ -1,0 +1,162 @@
+body, html
+{
+    font-family: 'Inconsolata', monospace;
+}
+
+body, html, button, td
+{
+    font-size: 16px;
+}
+
+.selected {
+    font-weight: bold;
+}
+
+
+html, body
+{
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+    height: 100%;
+}
+
+body, td, h1, h2, h3, h4
+{
+    font-family: Roboto, sans-serif;
+}
+
+.dotdotdot
+{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#top, #main, #bottom, #devices
+{
+    padding: 8px;    
+}
+
+#app
+{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+#top
+{
+    background-color: #ddd;
+    flex: 0;
+    padding-top: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #666;
+}
+
+#main
+{
+    background-color: #fff;
+    flex: 1;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    height: 100%;
+    position: relative;
+}
+
+#bottom
+{
+    padding-top: 16px;
+    border-top: 1px solid #666;
+    background-color: #f8f8f8;
+    flex: 0;
+}
+
+#bottom {
+    background-color: #222;
+    color: white;
+}
+
+#bottom2
+{
+    background-color: #f8f8f8;
+}
+
+#top, #bottom, #path {
+    padding: 16px;
+}
+
+.deviceMenu {
+    padding-top: 16px;
+}
+
+table.files {
+    margin-top: 16px;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table.files tr {
+}
+
+table.files td {
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+table.files td:first-child {
+    padding-left: 16px;
+    width: 64px;
+}
+
+table.files td:last-child {
+    padding-right: 16px;
+    width: 16px;
+}
+
+table.files tr:hover {
+    background-color: #f0f0f0;
+}
+
+table.files tr.selected {
+    border-top: 1px solid #999;
+    border-bottom: 1px solid #999;
+    background-color: #f0f0f0;
+}
+
+table.files td.info .summary {
+    color: #999;
+    font-size: 0.8em;
+}
+
+#path {
+    border-bottom: 1px solid #666;
+    /* display: flex;
+    flex-direction: row; */
+}
+
+.pathSegment .separator
+{
+    display: inline-block;
+    color: #666;
+    width: 16px;
+    text-align: center;
+}
+
+.pathSegment:last-child .separator
+{
+     display: none; 
+}
+
+.link {
+    color: #d44;
+    cursor: hand;
+}
+
+
+input[type=range]
+{
+    background-color: rgba(0,0,0,0);
+} 
