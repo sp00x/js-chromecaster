@@ -13,11 +13,16 @@ const Client = CastV2Client.Client;
 const DefaultMediaReceiver = CastV2Client.DefaultMediaReceiver;
 
 const SocketIO = require('socket.io');
-const DriveLetters = require('windows-drive-letters');
 const OS = require('os');
 const FS = require('fs');
 
-const isWindows = OS.type() == 'Windows_NT';
+let isWindows = OS.type() == 'Windows_NT';
+let DriveLetters;
+try {
+    DriveLetters = require('windows-drive-letters');
+} catch (e) {
+    isWindnows = false;
+}
 
 const config = {
     httpPort: 52810
