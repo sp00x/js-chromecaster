@@ -68,7 +68,7 @@ io.on('connection', socket =>
 
     const getFullPath = () =>
     {
-        return Path.join.apply(Path, cwd.map((v, i) => { return i > 0 ? v : v + '\\' }));        
+        return Path.join.apply(Path, cwd.map((v, i) => { return i > 0 ? v : v + Path.sep }));        
     };
 
     const emitDir = () =>
@@ -96,6 +96,14 @@ io.on('connection', socket =>
                 });
             })
         }
+        else if (cwd.length == 0 && !isWindows)
+        {
+            log("listing non-windows root..");
+            socket.emit('dir', {
+                cwd: cwd,
+                files: [{ name: '/', type: 'dir' }]
+            })
+        }
         else
         {
             log(cwd);
@@ -105,6 +113,7 @@ io.on('connection', socket =>
             try
             {
                 files = FS.readdirSync(fullPath);
+                console.dir(files);
                 files = files.map(name =>
                 {
                     try
@@ -119,7 +128,13 @@ io.on('connection', socket =>
                     }
                     catch (e) 
                     {
-                        return null;
+                        console.log("error: %s, at %s", e.message, e.stack)
+                        return { // hack https://github.com/nodejs/node/issues/19455 
+                            name: name,
+                            sz: 0,
+                            mtime: 0,
+                            type: 'file'
+                        }
                     }
                 })
                 .filter(f => f != null)
