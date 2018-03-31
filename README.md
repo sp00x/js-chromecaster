@@ -1,3 +1,3 @@
-= js-chromecster
+# js-chromecaster
 
 work in progress..
